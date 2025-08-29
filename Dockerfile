@@ -31,9 +31,13 @@ RUN rc-update add local default
 # Configure sudo
 RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+# Create ansible user with home directory
+RUN useradd -m -s /bin/bash ansible \
+    && echo "ansible:ansible" | chpasswd
+
 # Install Ansible inventory file
 RUN mkdir -p /etc/ansible
-RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+RUN echo "[local]\nlocalhost ansible_user=ansible ansible_connection=local" > /etc/ansible/hosts
 
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/sbin/init"]
