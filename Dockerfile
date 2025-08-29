@@ -31,6 +31,9 @@ RUN rc-update add local default
 # Configure sudo
 RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+# Configure sudo access for ansible user with password requirement
+RUN echo "ansible ALL=(ALL:ALL) ALL" > /etc/sudoers.d/ansible
+
 # Create ansible user with home directory
 RUN useradd -m -s /bin/bash ansible \
     && echo "ansible:ansible" | chpasswd
